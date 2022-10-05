@@ -42,20 +42,31 @@ def extract_wwr_jobs(keyword):
                 # Get link
                 link = anchor['href']
 
-                # Get company, kink, region
-                company, kind, region = anchor.find_all('span',
-                                                        class_="company")
+               # Get company, kink, region
+                count_company = len(anchor.find_all('span', class_="company"))
+
+                if count_company == 2:
+                    company, region = anchor.find_all('span', class_="company")
+
+                elif count_company == 3:
+                    company, kind, region = anchor.find_all('span',
+                                                            class_="company")
+                company = str(company.string).replace(",", " ")
+                region = str(region.string).replace(",", " ")
 
                 # Get title
-                title = anchor.find('span', class_="title")
+                title = str(anchor.find('span',
+                                        class_="title").string).replace(
+                                            ",", " ")
 
                 # Save web scrapping data in dictionary
                 job_data = {
-                    'link': f"https://weworkremotely.com{link}",
-                    'company': company.string.replace(",", " "),
-                    'location': region.string.replace(",", " "),
-                    'position': title.string.replace(",", " "),
+                    'link': link,
+                    'company': company,
+                    'location': region,
+                    'position': title,
                 }
+
 
                 results.append(job_data)
 
